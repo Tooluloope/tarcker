@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './sign-up.component.scss';
 import { Grid, Typography, TextField, Paper, Container, makeStyles, CssBaseline, Avatar, FormControlLabel, Button, Link, Checkbox, Box} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { auth, createUserProfileDocument } from '../firebase/firebase.utils';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -32,12 +33,26 @@ const SignUp = ()=> {
     const classes = useStyles();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [password1, setPassword1] = useState('')
+    const [displayName, setDisplayName] = useState('')
 
-    const handleChange = ()=> {
+  
+    const handleSubmit = async (e)=> {
+      e.preventDefault(); 
 
-    }
-    const handleSubmit = ()=> {
-        
+      if(password !== password1) return 
+
+      try {
+        const {user} = await auth.createUserWithEmailAndPassword(email, password)
+        await createUserProfileDocument(user, {displayName})
+      } catch (error) {
+        console.log(error.message)
+      }
+
+      setEmail('')
+      setDisplayName('') 
+      setPassword('')
+      setPassword1('')
     }
 
     return(
@@ -51,29 +66,30 @@ const SignUp = ()=> {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <form className={classes.form} >
+        <form className={classes.form} onSubmit = {handleSubmit} >
             <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="name"
             label="Full Name"
-            name="name"
-            autoComplete="name"
+            name="displayName"
+            value={displayName}
+            autoComplete="displayName"
             type='text'
-
+            onChange = {event => setDisplayName(event.target.value)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
+            value={email}
             autoComplete="email"
             type='email'
+            onChange = {event => setEmail(event.target.value)}
  
           />
           <TextField
@@ -84,8 +100,9 @@ const SignUp = ()=> {
             name="password"
             label="Password"
             type="password"
-            id="password"
+            value={password}
             autoComplete="current-password"
+            onChange = {event => setPassword(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -95,8 +112,9 @@ const SignUp = ()=> {
             name="password1"
             label="Confirm Password"
             type="password"
-            id="password1"
             autoComplete="current-password"
+            value={password1}
+            onChange = {event => setPassword1(event.target.value)}
           />
          
           <Button
@@ -105,6 +123,7 @@ const SignUp = ()=> {
             variant="contained"
             color="primary"
             className={classes.submit}
+            
           >
             Sign Up
           </Button>

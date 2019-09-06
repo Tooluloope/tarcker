@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
       flexGrow: 1,
     },
   }));
-const NavBar = ()=> {
+const NavBar = ({currentUser})=> {
     const classes = useStyles();
     return(
         <Router>

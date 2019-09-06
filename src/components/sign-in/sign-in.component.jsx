@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './sign-in.component.scss';
 import { Grid, Typography, TextField, Paper, Container, makeStyles, CssBaseline, Avatar, FormControlLabel, Button, Link, Checkbox, Box} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { auth, signInWithGoogle } from '../firebase/firebase.utils';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -30,15 +31,35 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = ()=> {
     const classes = useStyles();
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleChange = ()=> {
+    // const handleChange = (e)=> {
+    //     const {name, value} = e.target;
+    //     if (name === 'email') {
+    //         setEmail = value
+    //    }else{
+    //        setPassword = value
+    //    }
 
-    }
-    const handleSubmit = (e)=> {
+    // }
+    const handleSubmit = async (e)=> {
         e.preventDefault();
+
+        try {
+            
+            console.log(email, password)
+            await auth.signInWithEmailAndPassword(email, password)
+        }catch(err) {
+            console.log(err.message)
+        }
+
+        setEmail('')
+        setPassword('')
+
+
     }
+
 
     return(
         
@@ -57,12 +78,12 @@ const SignIn = ()=> {
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
+                   
                     label="Email Address"
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    onChange = {handleChange}
+                    onChange = {event => setEmail(event.target.value)}
                     value = {email}
                     />
                     <TextField
@@ -73,9 +94,9 @@ const SignIn = ()=> {
                     name="password"
                     label="Password"
                     type="password"
-                    id="password"
+                    
                     autoComplete="current-password"
-                    onChange = {handleChange}
+                    onChange = {event => setPassword(event.target.value)}
                     value = {password}
                     />
                     <FormControlLabel
@@ -88,8 +109,21 @@ const SignIn = ()=> {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+
                     >
                     Sign In
+                    </Button>
+
+                    <Button
+                    style = {{backgroundColor: '#D34836', marginTop: 0}}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick = {signInWithGoogle}
+                    >
+                    Sign In With Google
                     </Button>
                     <Grid container>
                     <Grid item xs>

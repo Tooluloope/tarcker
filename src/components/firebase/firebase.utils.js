@@ -1,16 +1,65 @@
-import firebase from 'firebase';
-import auth from 'firebase/auth';
-import firestore from 'firebase/firestore';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+
 
 
 const config = {
-    apiKey: "AIzaSyC_q24ZZR2arRfWOMO7T4-opG2XuhnMqhY",
-    authDomain: "tracker-bf078.firebaseapp.com",
-    databaseURL: "https://tracker-bf078.firebaseio.com",
-    projectId: "tracker-bf078",
-    storageBucket: "",
-    messagingSenderId: "630626812771",
-    appId: "1:630626812771:web:b49cff0e1297da7c"
-  };
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASE_URL,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_API_ID
+
+};
+
+
+
+// Takes in the Authenticated User after component did mount  and check if user Snapshot exist in Firestore and user return  reference to the USer
+export const createUserProfileDocument = async (userAuth, ...additionalData) => {
+    if(!userAuth) return 
+    
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+    const snapShot = await userRef.get()
+
+    if(!snapShot.exists) {
+        const {displayName, email} = userAuth
+        const createdAt = new Date()
+
+        await userRef.set({
+            displayName,
+            email,
+            createdAt,
+            additionalData
+        });
+    }
+
+    return userRef;
+}
+ 
+ 
+ 
   // Initialize Firebase
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
+
+export const auth = firebase.auth();
+
+export const firestore = firebase.firestore();
+
+// Represents the Google Sign-In authentication provider. Use this class to obtain GoogleAuthCredentials.
+// Start a sign in process for an unauthenticated user.
+const provider = new firebase.auth.GoogleAuthProvider();
+
+// Sets the OAuth custom parameters to pass in a Google OAuth request for popup and redirect sign-in operations
+provider.setCustomParameters({prompt: 'select_account'})
+
+// Sign in with a Google popup
+export const signInWithGoogle = ()=> auth.signInWithPopup(provider)
+
+
+
+
+  export default firebase;
