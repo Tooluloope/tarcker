@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './sign-in.component.scss';
-import { Grid, Typography, TextField, Paper, Container, makeStyles, CssBaseline, Avatar, FormControlLabel, Button, Link, Checkbox, Box} from '@material-ui/core'
+import { Grid, Typography, TextField, Container, makeStyles, CssBaseline, Avatar, FormControlLabel, Button, Link, Checkbox} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { auth, signInWithGoogle } from '../firebase/firebase.utils';
 

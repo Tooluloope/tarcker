@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './sign-up.component.scss';
-import { Grid, Typography, TextField, Paper, Container, makeStyles, CssBaseline, Avatar, FormControlLabel, Button, Link, Checkbox, Box} from '@material-ui/core'
+import {  Typography, TextField, Container, makeStyles, CssBaseline, Avatar, Button} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { auth, createUserProfileDocument } from '../firebase/firebase.utils';
 
@@ -35,6 +35,8 @@ const SignUp = ()=> {
     const [password, setPassword] = useState('')
     const [password1, setPassword1] = useState('')
     const [displayName, setDisplayName] = useState('')
+    const [error, setError] = useState('error')
+
 
   
     const handleSubmit = async (e)=> {
@@ -44,15 +46,16 @@ const SignUp = ()=> {
 
       try {
         const {user} = await auth.createUserWithEmailAndPassword(email, password)
-        await createUserProfileDocument(user, {displayName})
+        await createUserProfileDocument(user, displayName)
       } catch (error) {
-        console.log(error.message)
+        setError(error.message.toString())
       }
 
       setEmail('')
       setDisplayName('') 
       setPassword('')
       setPassword1('')
+      setError('') 
     }
 
     return(
@@ -66,7 +69,11 @@ const SignUp = ()=> {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
+
         <form className={classes.form} onSubmit = {handleSubmit} >
+            <Typography>
+              {error}
+            </Typography>
             <TextField
             variant="outlined"
             margin="normal"

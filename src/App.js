@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 import './App.css';
-import firebase, { auth, createUserProfileDocument } from '../src/components/firebase/firebase.utils';
+import  { auth, createUserProfileDocument } from '../src/components/firebase/firebase.utils';
 
 import NavBar from './components/nav-bar/nav-bar.component';
 
@@ -28,7 +28,8 @@ function App() {
         setCurrentUser(userAuth)
       }
     });
-  }, [])
+  }, []
+  )
 
   // const componentWillUnmount = () => {
   //   this.unsubscribeFromAuth()

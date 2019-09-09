@@ -18,7 +18,7 @@ const config = {
 
 
 // Takes in the Authenticated User after component did mount  and check if user Snapshot exist in Firestore and user return  reference to the USer
-export const createUserProfileDocument = async (userAuth, ...additionalData) => {
+export const createUserProfileDocument = async (userAuth, displayName, ...additionalData) => {
     if(!userAuth) return 
     
     const userRef = firestore.doc(`users/${userAuth.uid}`);
@@ -26,15 +26,29 @@ export const createUserProfileDocument = async (userAuth, ...additionalData) => 
     const snapShot = await userRef.get()
 
     if(!snapShot.exists) {
-        const {displayName, email} = userAuth
+        const {email} = userAuth
         const createdAt = new Date()
 
         await userRef.set({
-            displayName,
+            
             email,
             createdAt,
             additionalData
         });
+
+        // Updating the user displayName
+
+        let user = firebase.auth().currentUser;
+        console.log(user)
+
+        user.updateProfile({
+            displayName: displayName,
+            
+          }).then(function() {
+            console.log("Update Successful")
+          }).catch(function(error) {
+            console.log(error)
+          });
     }
 
     return userRef;

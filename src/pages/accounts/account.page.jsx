@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './account.page.scss';
 import  SignIn  from '../../components/sign-in/sign-in.component';
 
-import { Grid, Typography, TextField, Paper, Container, makeStyles} from '@material-ui/core'
+import { Grid,  makeStyles} from '@material-ui/core'
 import SignUp from '../../components/sign-up/sign-up.component';
 
 const styles = {
@@ -25,15 +25,7 @@ const useStyles = makeStyles(styles);
 
 const Account = ()=> {
     const classes = useStyles();
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    const handleChange = ()=> {
-
-    }
-    const handleSubmit = ()=> {
-        
-    }
+    
 
     return(
         <div className={classes.root}> 

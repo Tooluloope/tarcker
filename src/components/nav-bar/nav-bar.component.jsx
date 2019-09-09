@@ -6,6 +6,7 @@ import Home from '../../pages/home/home.page';
 import Account from '../../pages/accounts/account.page';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { auth } from '../firebase/firebase.utils';
 // import MenuIcon from '@material-ui/icons/Menu';
 
 
@@ -19,6 +20,10 @@ const useStyles = makeStyles(theme => ({
     title: {
       flexGrow: 1,
     },
+    link: {
+      color: 'white',
+      textDecoration: 'none'
+    }
   }));
 const NavBar = ({currentUser})=> {
     const classes = useStyles();
@@ -36,9 +41,15 @@ const NavBar = ({currentUser})=> {
                         <Link className="nav-link"  tabIndex="-1"  to='/'>Home</Link>
                     </Typography>
                     <Button color="inherit">
+                      {currentUser ? 
+                        <Link to='/sign-in'  className= {`${classes.link}`} tabIndex="-1" onClick={()=> auth.signOut()}> Sign Out </Link> :
+
+                        <Link className="nav-link"  tabIndex="-1"  to='/sign-in'>Sign In</Link>
+                      }
                         
-                    <Link className="nav-link"  tabIndex="-1"  to='/sign-in'>Sign In</Link>
+                    
                     </Button>
+                    
                     </Toolbar>
                 </AppBar>
                 </div>
